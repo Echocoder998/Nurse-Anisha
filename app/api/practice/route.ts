@@ -1,0 +1,76 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@/lib/db';
+import { drugs, quizAttempts } from '@/lib/schema';
+import { count, sql } from 'drizzle-orm';
+import { nanoid } from 'nanoid';
+import { completeJSON } from '@/lib/anthropic';
+import { buildPersona, languageRule, Language } from '@/lib/persona';
+
+export async function GET() {
+  const [stats] = await db
+    .select({
+      total: count(),
+      correct: sql<number>`sum(case when ${quizAttempts.isCorrect} = 1 then 1 else 0 end)`,
+    })
+    .from(quizAttempts);
+  return NextResponse.json({
+    total: stats?.total ?? 0,
+    correct: Number(stats?.correct ?? 0),
+  });
+}
+
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  const { action } = body;
+
+  if (action === 'generate') {
+    const { topic, language = 'en' } = body as { topic?: string; language?: Language };
+    const library = await db.select({ name: drugs.name, drugClass: drugs.drugClass }).from(drugs);
+
+    const drugContext =
+      library.length > 0 && !topic
+        ? `Pick from these drugs the student is studying: ${library.map((d) => `${d.name} (${d.drugClass || 'unspecified class'})`).join('; ')}.`
+        : topic
+          ? `Focus the question on: ${topic}.`
+          : 'Pick any high-yield NCLEX pharmacology topic.';
+
+    const system = `${buildPersona(language)}
+
+You are now writing an NCLEX-RN style pharmacology question. Generate clinically realistic questions matched to the NCLEX test plan.
+
+IMPORTANT: The question stem and answer options MUST remain in English (NCLEX is tested in English — practicing in English is the point). However, the rationale and distractor notes can follow her language preference.${languageRule(language)}`;
+
+    const q = await completeJSON(
+      `Generate ONE NCLEX-RN style pharmacology question. ${drugContext}
+
+Required JSON shape:
+{
+  "scenario": "Brief clinical scenario in English (1-3 sentences setting up patient context)",
+  "stem": "The actual question being asked, in English",
+  "options": ["A) ...", "B) ...", "C) ...", "D) ..."],
+  "correctIndex": 0,
+  "rationale": "Why the correct answer is right (2-3 sentences clinical reasoning) — in her preferred language",
+  "distractorNotes": "Brief note on why each wrong option is wrong — in her preferred language"
+}
+
+NCLEX style: prioritize "what does the nurse do FIRST/NEXT", "which finding requires immediate intervention", "patient teaching", "expected effects vs adverse effects". Avoid trick questions.`,
+      system,
+      1500
+    );
+
+    return NextResponse.json(q);
+  }
+
+  if (action === 'record') {
+    const { topic, isCorrect } = body;
+    await db.insert(quizAttempts).values({
+      id: nanoid(10),
+      topic: topic ?? null,
+      isCorrect: Boolean(isCorrect),
+      createdAt: Date.now(),
+    });
+    return NextResponse.json({ ok: true });
+  }
+
+  return NextResponse.json({ error: 'unknown action' }, { status: 400 });
+}
