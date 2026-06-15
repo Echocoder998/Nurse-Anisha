@@ -14,12 +14,6 @@ const SUGGESTIONS: Record<Language, string[]> = {
     'Give me 3 NCLEX questions on anticoagulants with rationales',
     'Walk me through the cytochrome P450 interactions I need to know',
   ],
-  taglish: [
-    'Paano nga ulit yung mechanism ng beta blockers?',
-    'Ate, what should I assess before giving digoxin?',
-    'Bigyan mo ako ng 3 NCLEX questions sa anticoagulants',
-    'I-explain mo yung cytochrome P450 interactions, please',
-  ],
   tl: [
     'Paliwanagin mo ang pagkakaiba ng selective at non-selective beta blockers',
     'Anong mga priority na assessments bago ibigay ang digoxin?',
@@ -30,19 +24,16 @@ const SUGGESTIONS: Record<Language, string[]> = {
 
 const WELCOME: Record<Language, string> = {
   en: 'Ask anything — drug mechanisms, NCLEX practice, nursing considerations, or a confusing concept from lecture.',
-  taglish: 'Tanong mo lang — drug mechanisms, NCLEX practice, nursing considerations, o kung ano mang nakakalito sa lecture.',
   tl: 'Magtanong ka lang — kahit ano tungkol sa drug mechanisms, NCLEX practice, nursing considerations, o ano mang nakakalito sa lecture mo.',
 };
 
 const PLACEHOLDER: Record<Language, string> = {
   en: 'Ask a question...',
-  taglish: 'Magtanong ka...',
   tl: 'Magtanong ka...',
 };
 
 const TRY_LABEL: Record<Language, string> = {
   en: 'Try',
-  taglish: 'Subukan',
   tl: 'Subukan',
 };
 

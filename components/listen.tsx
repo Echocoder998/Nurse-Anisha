@@ -17,7 +17,6 @@ export function Listen({ language }: { language: Language }) {
   // filter voices by current language preference, with sensible fallback
   const voices = useMemo(() => {
     if (allVoices.length === 0) return [];
-    // For Tagalog, prefer fil-PH or tl-PH voices; for Taglish, English voices handle code-mix better than pure Tagalog TTS
     const isTagalog = (v: SpeechSynthesisVoice) =>
       v.lang.toLowerCase().startsWith('fil') || v.lang.toLowerCase().startsWith('tl');
     const isEnglish = (v: SpeechSynthesisVoice) => v.lang.toLowerCase().startsWith('en');
@@ -26,10 +25,6 @@ export function Listen({ language }: { language: Language }) {
       const tagalogVoices = allVoices.filter(isTagalog);
       if (tagalogVoices.length > 0) return tagalogVoices;
       // fallback: any English voice will phonetically approximate
-      return allVoices.filter(isEnglish);
-    }
-    if (language === 'taglish') {
-      // English voices read Taglish scripts more naturally for the English drug terms
       return allVoices.filter(isEnglish);
     }
     return allVoices.filter(isEnglish);
@@ -109,9 +104,7 @@ export function Listen({ language }: { language: Language }) {
   const subhead =
     language === 'en'
       ? 'A short spoken review you can listen to in the car, on a walk, or with eyes closed.'
-      : language === 'tl'
-        ? 'Isang maikling spoken review na maaari mong pakinggan sa kotse, habang naglalakad, o nakapikit.'
-        : 'A short spoken review na pwede mong pakinggan sa kotse, habang naglalakad, or with eyes closed.';
+      : 'Isang maikling spoken review na maaari mong pakinggan sa kotse, habang naglalakad, o nakapikit.';
   const topicLabel = language === 'en' ? 'Topic (optional)' : 'Paksa (optional)';
   const ctaLabel = loading
     ? language === 'en'
@@ -119,9 +112,7 @@ export function Listen({ language }: { language: Language }) {
       : 'Sinusulat...'
     : language === 'en'
       ? 'Generate review'
-      : language === 'tl'
-        ? 'Gumawa ng review'
-        : 'Gumawa ng review';
+      : 'Gumawa ng review';
 
   return (
     <div className="flex flex-col h-full">

@@ -4,8 +4,8 @@
 
 @layer base {
   html, body {
-    background: #FAF7F0;
-    color: #1A2238;
+    background: #FDF6F8;
+    color: #1C1028;
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
@@ -19,7 +19,7 @@
     font-size: 0.7rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #4A5266;
+    color: #5C3F6A;
     font-weight: 500;
   }
 }

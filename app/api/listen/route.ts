@@ -7,7 +7,6 @@ import { buildPersona, Language } from '@/lib/persona';
 const LANGUAGE_SCRIPT_DIRECTIVES: Record<Language, string> = {
   en: 'Write the script in clear, warm English.',
   tl: 'Write the script primarily in Tagalog — conversational, like talking to a friend. Keep drug names, mechanisms, conditions, and lab values in English. Pronounce-friendly: spell out tricky English drug names phonetically when helpful.',
-  taglish: 'Write the script in natural Taglish — the way Filipinos actually talk. Mix English medical terms with Tagalog connective phrases. Should feel like a study buddy explaining things, not a lecture.',
 };
 
 export async function POST(req: NextRequest) {

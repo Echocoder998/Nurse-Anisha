@@ -24,7 +24,7 @@ export default function Page() {
 
   useEffect(() => {
     const saved = localStorage.getItem(LANG_KEY) as Language | null;
-    if (saved === 'en' || saved === 'tl' || saved === 'taglish') {
+    if (saved === 'en' || saved === 'tl') {
       setLanguageState(saved);
     }
   }, []);

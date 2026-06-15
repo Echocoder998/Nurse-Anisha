@@ -4,7 +4,6 @@ import type { Language } from '@/lib/persona';
 
 const OPTIONS: { id: Language; label: string; full: string }[] = [
   { id: 'en', label: 'EN', full: 'English' },
-  { id: 'taglish', label: 'TGL', full: 'Taglish' },
   { id: 'tl', label: 'TL', full: 'Tagalog' },
 ];
 

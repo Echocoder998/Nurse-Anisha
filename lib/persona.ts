@@ -1,15 +1,13 @@
-export type Language = 'en' | 'tl' | 'taglish';
+export type Language = 'en' | 'tl';
 
 export const LANGUAGE_LABELS: Record<Language, string> = {
   en: 'English',
   tl: 'Tagalog',
-  taglish: 'Taglish',
 };
 
 const LANGUAGE_DIRECTIVES: Record<Language, string> = {
   en: 'Default to English prose. Clean, clear, professional warmth.',
   tl: 'Default to Tagalog prose for explanations and conversation. Keep ALL medical terminology in English (drug names, mechanisms, conditions, lab values, anatomical terms). Use Tagalog for the connective tissue, reasoning aloud, and encouragement.',
-  taglish: 'Default to natural Filipino code-switching (Taglish) — the way nursing students actually talk. Mix English medical terms with Tagalog connective phrases. Example register: "Yung warfarin, anticoagulant siya — so kailangan i-monitor mo yung INR." Never force it; let it flow.',
 };
 
 /**
@@ -55,8 +53,5 @@ ${LANGUAGE_DIRECTIVES[language]}`;
  */
 export function languageRule(language: Language): string {
   if (language === 'en') return '';
-  if (language === 'tl') {
-    return ' For any free-form prose (rationales, notes, explanations), default to Tagalog. Keep all drug names, medical terminology, and clinical values in English.';
-  }
-  return ' For any free-form prose (rationales, notes, explanations), use natural Taglish code-switching. Keep all drug names and clinical terms in English; weave Tagalog through the connective tissue.';
+  return ' For any free-form prose (rationales, notes, explanations), default to Tagalog. Keep all drug names, medical terminology, and clinical values in English.';
 }
