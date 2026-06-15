@@ -95,7 +95,7 @@ export function Flashcards({ drugCount, onChange }: { drugCount: number; onChang
       <div className="flex-1 flex items-center justify-center px-3 sm:px-6 py-4 sm:py-8 overflow-y-auto">
         <div className="w-full max-w-xl">
           <div
-            className={`bg-paper border border-edge p-5 sm:p-10 min-h-[16rem] sm:min-h-[24rem] ${revealed ? '' : 'cursor-pointer'}`}
+            className={`bg-paper border border-edge rounded shadow-sm p-5 sm:p-10 min-h-[16rem] sm:min-h-[24rem] ${revealed ? '' : 'cursor-pointer'}`}
             onClick={() => !revealed && setRevealed(true)}
           >
             <Eyebrow>{card.drug.drugClass || 'Drug'}</Eyebrow>
@@ -159,7 +159,7 @@ function GradeButton({
   return (
     <button
       onClick={onClick}
-      className={`bg-paper border border-t-[3px] ${borderClass} py-3.5 px-2 text-ink hover:opacity-80 transition active:scale-[0.98]`}
+      className={`bg-paper border border-t-[3px] ${borderClass} rounded py-3.5 px-2 text-ink hover:opacity-80 transition active:scale-[0.98]`}
     >
       <div className="text-[0.85rem] font-semibold">{label}</div>
       <div className="text-[0.7rem] text-ink-faint font-mono mt-0.5">{sublabel}</div>

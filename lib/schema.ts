@@ -28,6 +28,7 @@ export const flashcards = sqliteTable('flashcards', {
 export const quizAttempts = sqliteTable('quiz_attempts', {
   id: text('id').primaryKey(),
   topic: text('topic'),
+  subject: text('subject'),
   isCorrect: integer('is_correct', { mode: 'boolean' }).notNull(),
   createdAt: integer('created_at').notNull(),
 });

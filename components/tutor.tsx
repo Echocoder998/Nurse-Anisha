@@ -106,7 +106,7 @@ export function Tutor({ language }: { language: Language }) {
                 <button
                   key={i}
                   onClick={() => setInput(s)}
-                  className="w-full text-left px-3 py-2.5 bg-paper border border-edge text-[0.88rem] text-ink hover:bg-mist transition"
+                  className="w-full text-left px-3 py-2.5 bg-paper border border-edge rounded text-[0.88rem] text-ink hover:bg-mist transition"
                 >
                   {s}
                 </button>

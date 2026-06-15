@@ -14,12 +14,29 @@ type Question = {
   distractorNotes?: string;
 };
 
+type Subject = {
+  id: string;
+  label: string;
+};
+
+const SUBJECTS: Subject[] = [
+  { id: 'pharmacology', label: 'Pharmacology' },
+  { id: 'fundamentals', label: 'Fundamentals' },
+  { id: 'med-surg', label: 'Med-Surg' },
+  { id: 'maternal', label: 'Maternal' },
+  { id: 'pediatrics', label: 'Pediatrics' },
+  { id: 'mental-health', label: 'Mental Health' },
+  { id: 'leadership', label: 'Leadership' },
+  { id: 'community', label: 'Community' },
+];
+
 export function Practice({ language }: { language: Language }) {
   const [question, setQuestion] = useState<Question | null>(null);
   const [selected, setSelected] = useState<number | null>(null);
   const [revealed, setRevealed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [topic, setTopic] = useState('');
+  const [subject, setSubject] = useState('pharmacology');
   const [stats, setStats] = useState({ correct: 0, total: 0 });
   const [error, setError] = useState('');
 
@@ -38,7 +55,7 @@ export function Practice({ language }: { language: Language }) {
       const r = await fetch('/api/practice', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'generate', topic, language }),
+        body: JSON.stringify({ action: 'generate', topic, language, subject }),
       });
       const q = await r.json();
       if (q.error) setError(q.error);
@@ -58,7 +75,7 @@ export function Practice({ language }: { language: Language }) {
     await fetch('/api/practice', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'record', topic, isCorrect }),
+      body: JSON.stringify({ action: 'record', topic, isCorrect, subject }),
     });
   };
 
@@ -86,15 +103,46 @@ export function Practice({ language }: { language: Language }) {
           {!question && !loading && (
             <div>
               <p className="font-display italic text-ink-soft text-[1.05rem] leading-relaxed">
-                Generate an NCLEX-style question on any topic, or leave blank to pull from your drug
-                library.
+                Choose a subject, then generate an NCLEX-style question. Leave the topic blank to
+                let the AI pick a high-yield topic for you.
               </p>
+
+              <div className="mt-5">
+                <Eyebrow>Subject</Eyebrow>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {SUBJECTS.map((s) => {
+                    const active = subject === s.id;
+                    return (
+                      <button
+                        key={s.id}
+                        onClick={() => setSubject(s.id)}
+                        className={`px-3 py-1.5 text-[0.8rem] border rounded-full transition font-body ${
+                          active
+                            ? 'bg-eucalyptus text-white border-eucalyptus'
+                            : 'bg-paper text-ink-soft border-edge hover:border-ink-soft'
+                        }`}
+                      >
+                        {s.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               <div className="mt-5">
                 <Eyebrow>Topic (optional)</Eyebrow>
                 <input
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
-                  placeholder="e.g. anticoagulants, antibiotics, opioid reversal..."
+                  placeholder={
+                    subject === 'pharmacology'
+                      ? 'e.g. anticoagulants, antibiotics, opioid reversal...'
+                      : subject === 'fundamentals'
+                        ? 'e.g. wound care, infection control, vital signs...'
+                        : subject === 'mental-health'
+                          ? 'e.g. schizophrenia, therapeutic communication, crisis...'
+                          : 'e.g. leave blank for a random high-yield topic'
+                  }
                   className="w-full mt-1.5 px-3 py-2.5 border border-edge bg-paper font-body text-[0.92rem] outline-none"
                 />
               </div>
@@ -115,7 +163,7 @@ export function Practice({ language }: { language: Language }) {
 
           {question?.stem && (
             <div>
-              <div className="bg-paper border border-edge p-6">
+              <div className="bg-paper border border-edge p-6 rounded shadow-sm">
                 <Eyebrow>Scenario</Eyebrow>
                 <p className="font-body text-[0.95rem] leading-relaxed text-ink mt-1.5">
                   {question.scenario}
@@ -148,7 +196,7 @@ export function Practice({ language }: { language: Language }) {
                       key={i}
                       onClick={() => !revealed && setSelected(i)}
                       disabled={revealed}
-                      className={`w-full text-left transition ${bg} border border-l-[3px] ${border} px-4 py-3.5 font-body text-[0.92rem] text-ink ${revealed ? 'cursor-default' : 'cursor-pointer'}`}
+                      className={`w-full text-left transition rounded ${bg} border border-l-[3px] ${border} px-4 py-3.5 font-body text-[0.92rem] text-ink ${revealed ? 'cursor-default' : 'cursor-pointer'}`}
                     >
                       {opt}
                       {revealed && isCorrect && (
@@ -163,7 +211,7 @@ export function Practice({ language }: { language: Language }) {
               </div>
 
               {revealed && (
-                <div className="mt-5 bg-paper border border-edge border-l-[3px] border-l-honey p-5">
+                <div className="mt-5 bg-paper border border-edge border-l-[3px] border-l-honey p-5 rounded shadow-sm">
                   <Eyebrow>Rationale</Eyebrow>
                   <p className="font-body text-[0.9rem] leading-relaxed text-ink mt-1.5">
                     {question.rationale}

@@ -1,17 +1,18 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { MessageCircle, Layers, BookOpen, Library as LibraryIcon, Headphones, Loader2 } from 'lucide-react';
+import { MessageCircle, Layers, BookOpen, Library as LibraryIcon, Headphones, Brain, Loader2 } from 'lucide-react';
 import { Tutor } from '@/components/tutor';
 import { Flashcards } from '@/components/flashcards';
 import { Practice } from '@/components/practice';
 import { Library } from '@/components/library';
 import { Listen } from '@/components/listen';
+import { Mnemonics } from '@/components/mnemonics';
 import { LanguageSwitch } from '@/components/language-switch';
 import type { Drug } from '@/lib/schema';
 import type { Language } from '@/lib/persona';
 
-type Mode = 'tutor' | 'flashcards' | 'practice' | 'library' | 'listen';
+type Mode = 'tutor' | 'flashcards' | 'practice' | 'library' | 'listen' | 'mnemonics';
 
 const LANG_KEY = 'apothecary.language';
 
@@ -51,6 +52,7 @@ export default function Page() {
     { id: 'tutor', label: 'Tutor', Icon: MessageCircle },
     { id: 'flashcards', label: 'Cards', Icon: Layers, badge: dueCount > 0 ? dueCount : null },
     { id: 'practice', label: 'Practice', Icon: BookOpen },
+    { id: 'mnemonics', label: 'Mnemonics', Icon: Brain },
     { id: 'library', label: 'Library', Icon: LibraryIcon, badge: drugs.length > 0 ? drugs.length : null },
     { id: 'listen', label: 'Listen', Icon: Headphones },
   ];
@@ -66,8 +68,8 @@ export default function Page() {
   return (
     <div className="bg-bg min-h-screen text-ink font-body">
       <div className="flex flex-col h-screen max-w-[1100px] mx-auto bg-bg islamic-bg">
-        <div className="h-1 bg-eucalyptus flex-shrink-0" aria-hidden="true" />
-        <header className="flex items-center justify-between px-6 py-4 border-b border-edge gap-3">
+        <div className="h-[3px] bg-eucalyptus flex-shrink-0" aria-hidden="true" />
+        <header className="flex items-center justify-between px-6 py-4 border-b border-edge gap-3 bg-gradient-to-b from-eucalyptus-soft/30 to-transparent">
           <div className="flex items-baseline gap-3 min-w-0">
             <div className="text-eucalyptus shrink-0">
               <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -78,13 +80,13 @@ export default function Page() {
               Anisha&rsquo;s Apothecary
             </h1>
             <span className="font-display italic text-ink-faint text-[0.85rem] hidden md:inline">
-              · NCLEX pharmacology
+              · NCLEX study companion
             </span>
           </div>
           <LanguageSwitch value={language} onChange={setLanguage} />
         </header>
 
-        <nav className="flex border-b border-edge bg-paper">
+        <nav className="flex overflow-x-auto border-b border-edge bg-paper">
           {modes.map((m) => {
             const active = mode === m.id;
             const Icon = m.Icon;
@@ -92,9 +94,9 @@ export default function Page() {
               <button
                 key={m.id}
                 onClick={() => setMode(m.id)}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-3 transition border-b-2 font-body text-[0.85rem] tracking-wide ${
+                className={`flex-1 shrink-0 min-w-[3.5rem] flex items-center justify-center gap-1.5 py-3 transition border-b-2 font-body text-[0.85rem] tracking-wide ${
                   active
-                    ? 'text-ink bg-bg border-eucalyptus font-semibold'
+                    ? 'text-eucalyptus bg-eucalyptus-soft border-eucalyptus font-semibold'
                     : 'text-ink-soft bg-transparent border-transparent font-medium'
                 }`}
               >
@@ -114,6 +116,7 @@ export default function Page() {
           {mode === 'tutor' && <Tutor language={language} />}
           {mode === 'flashcards' && <Flashcards drugCount={drugs.length} onChange={refresh} />}
           {mode === 'practice' && <Practice language={language} />}
+          {mode === 'mnemonics' && <Mnemonics language={language} />}
           {mode === 'library' && <Library drugs={drugs} onChange={refresh} language={language} />}
           {mode === 'listen' && <Listen language={language} />}
         </main>

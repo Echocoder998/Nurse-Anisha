@@ -233,7 +233,7 @@ function ImportOption({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-paper border border-edge p-4">
+    <div className="bg-paper border border-edge p-4 rounded shadow-sm">
       <div className="text-eucalyptus">{icon}</div>
       <div className="font-display text-base text-ink mt-1.5 font-medium">{title}</div>
       <div className="text-[0.78rem] text-ink-soft font-body mt-0.5">{body}</div>

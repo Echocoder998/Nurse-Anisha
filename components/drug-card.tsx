@@ -14,7 +14,7 @@ export function DrugCard({
   compact?: boolean;
 }) {
   return (
-    <div className={`bg-paper border border-edge ${compact ? 'p-4' : 'p-6'}`}>
+    <div className={`bg-paper border border-edge rounded shadow-sm ${compact ? 'p-4' : 'p-6'}`}>
       <Eyebrow>{drug.drugClass || 'Pharmacology'}</Eyebrow>
       <div className="flex items-baseline justify-between mt-1 mb-1">
         <h3
