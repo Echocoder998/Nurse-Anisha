@@ -7,7 +7,7 @@ const config: Config = {
       colors: {
         bg: '#FDF6F8',
         paper: '#FFFFFF',
-        ink: '#1C1028',
+        ink: '#2E1250',
         'ink-soft': '#5C3F6A',
         'ink-faint': '#A48BAD',
         eucalyptus: '#B8760D',
@@ -20,7 +20,7 @@ const config: Config = {
         edge: '#E4D0E0',
       },
       fontFamily: {
-        display: ['Fraunces', 'Georgia', 'serif'],
+        display: ['Playfair Display', 'Georgia', 'serif'],
         body: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
