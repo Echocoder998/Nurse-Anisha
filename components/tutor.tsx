@@ -80,7 +80,7 @@ export function Tutor({ language }: { language: Language }) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-edge">
+      <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-edge">
         <div>
           <Eyebrow>Conversation</Eyebrow>
           <h2 className="font-display text-2xl text-ink mt-0.5">
@@ -94,7 +94,7 @@ export function Tutor({ language }: { language: Language }) {
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 py-6">
+      <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-4 sm:py-6">
         {messages.length === 0 ? (
           <div className="max-w-xl mx-auto pt-8">
             <p className="font-display italic text-[1.15rem] text-ink-soft leading-relaxed">
@@ -141,7 +141,7 @@ export function Tutor({ language }: { language: Language }) {
         )}
       </div>
 
-      <div className="px-6 py-4 border-t border-edge bg-paper">
+      <div className="px-3 sm:px-6 py-3 sm:py-4 border-t border-edge bg-paper">
         <div className="max-w-3xl mx-auto flex gap-2">
           <textarea
             value={input}
@@ -154,7 +154,7 @@ export function Tutor({ language }: { language: Language }) {
             }}
             placeholder={PLACEHOLDER[language]}
             rows={1}
-            className="flex-1 px-3 py-2.5 border border-edge bg-bg resize-none font-body text-[0.92rem] text-ink outline-none rounded-sm min-h-[2.4rem] max-h-32"
+            className="flex-1 px-3 py-2.5 border border-edge bg-bg resize-none font-body text-[0.92rem] text-ink outline-none rounded-sm min-h-[2.75rem] max-h-32"
           />
           <Button onClick={send} disabled={!input.trim() || sending}>
             {sending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}

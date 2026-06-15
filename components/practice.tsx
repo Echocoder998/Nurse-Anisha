@@ -64,7 +64,7 @@ export function Practice({ language }: { language: Language }) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-edge">
+      <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-edge">
         <div>
           <Eyebrow>NCLEX-style practice</Eyebrow>
           <h2 className="font-display text-2xl text-ink mt-0.5">Question generator</h2>
@@ -81,7 +81,7 @@ export function Practice({ language }: { language: Language }) {
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 py-6">
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
         <div className="max-w-2xl mx-auto">
           {!question && !loading && (
             <div>
@@ -148,7 +148,7 @@ export function Practice({ language }: { language: Language }) {
                       key={i}
                       onClick={() => !revealed && setSelected(i)}
                       disabled={revealed}
-                      className={`w-full text-left transition ${bg} border border-l-[3px] ${border} px-4 py-2.5 font-body text-[0.92rem] text-ink ${revealed ? 'cursor-default' : 'cursor-pointer'}`}
+                      className={`w-full text-left transition ${bg} border border-l-[3px] ${border} px-4 py-3.5 font-body text-[0.92rem] text-ink ${revealed ? 'cursor-default' : 'cursor-pointer'}`}
                     >
                       {opt}
                       {revealed && isCorrect && (
@@ -180,7 +180,7 @@ export function Practice({ language }: { language: Language }) {
                 </div>
               )}
 
-              <div className="mt-5 flex gap-2">
+              <div className="mt-5 flex flex-wrap gap-2">
                 {!revealed ? (
                   <Button onClick={submit} disabled={selected === null}>
                     Submit answer

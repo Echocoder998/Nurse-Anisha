@@ -116,12 +116,12 @@ export function Listen({ language }: { language: Language }) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="px-6 py-4 border-b border-edge">
+      <div className="px-4 sm:px-6 py-4 border-b border-edge">
         <Eyebrow>Hands-free review</Eyebrow>
         <h2 className="font-display text-2xl text-ink mt-0.5">{heading}</h2>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 py-6">
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
         <div className="max-w-2xl mx-auto">
           <p className="font-display italic text-ink-soft text-[1.05rem] leading-relaxed">{subhead}</p>
 

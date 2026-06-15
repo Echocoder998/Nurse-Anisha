@@ -82,7 +82,7 @@ export function Flashcards({ drugCount, onChange }: { drugCount: number; onChang
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-edge">
+      <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-edge">
         <div>
           <Eyebrow>Spaced repetition</Eyebrow>
           <h2 className="font-display text-2xl text-ink mt-0.5">Flashcards</h2>
@@ -92,14 +92,14 @@ export function Flashcards({ drugCount, onChange }: { drugCount: number; onChang
         </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center px-6 py-8 overflow-y-auto">
+      <div className="flex-1 flex items-center justify-center px-3 sm:px-6 py-4 sm:py-8 overflow-y-auto">
         <div className="w-full max-w-xl">
           <div
-            className={`bg-paper border border-edge p-10 min-h-[24rem] ${revealed ? '' : 'cursor-pointer'}`}
+            className={`bg-paper border border-edge p-5 sm:p-10 min-h-[16rem] sm:min-h-[24rem] ${revealed ? '' : 'cursor-pointer'}`}
             onClick={() => !revealed && setRevealed(true)}
           >
             <Eyebrow>{card.drug.drugClass || 'Drug'}</Eyebrow>
-            <h3 className="font-display text-[2.5rem] text-ink mt-2 leading-none tracking-tight">
+            <h3 className="font-display text-[1.75rem] sm:text-[2.5rem] text-ink mt-2 leading-none tracking-tight">
               {card.drug.name}
             </h3>
             {card.drug.genericName && card.drug.genericName !== card.drug.name && (
@@ -159,7 +159,7 @@ function GradeButton({
   return (
     <button
       onClick={onClick}
-      className={`bg-paper border border-t-[3px] ${borderClass} py-2.5 px-2 text-ink hover:opacity-80 transition active:scale-[0.98]`}
+      className={`bg-paper border border-t-[3px] ${borderClass} py-3.5 px-2 text-ink hover:opacity-80 transition active:scale-[0.98]`}
     >
       <div className="text-[0.85rem] font-semibold">{label}</div>
       <div className="text-[0.7rem] text-ink-faint font-mono mt-0.5">{sublabel}</div>

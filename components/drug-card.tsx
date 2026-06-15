@@ -18,7 +18,7 @@ export function DrugCard({
       <Eyebrow>{drug.drugClass || 'Pharmacology'}</Eyebrow>
       <div className="flex items-baseline justify-between mt-1 mb-1">
         <h3
-          className={`font-display font-medium text-ink leading-tight tracking-tight ${compact ? 'text-[1.4rem]' : 'text-[1.85rem]'}`}
+          className={`font-display font-medium text-ink leading-tight tracking-tight ${compact ? 'text-[1.4rem]' : 'text-[1.4rem] sm:text-[1.85rem]'}`}
         >
           {drug.name}
         </h3>
