@@ -1,7 +1,7 @@
 'use client';
 
 import { Trash2 } from 'lucide-react';
-import { Eyebrow, Hairline, Field } from './ui';
+import { Eyebrow, IslamicDivider, Field } from './ui';
 import type { Drug } from '@/lib/schema';
 
 export function DrugCard({
@@ -31,7 +31,7 @@ export function DrugCard({
       {drug.genericName && drug.genericName !== drug.name && (
         <div className="font-display italic text-ink-soft text-[0.95rem]">{drug.genericName}</div>
       )}
-      <Hairline className="my-3" />
+      <IslamicDivider className="my-3" />
       {!compact && (
         <div className="space-y-2.5 text-[0.88rem] text-ink leading-relaxed">
           {drug.indication && <Field label="Indication" value={drug.indication} />}

@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Pill } from 'lucide-react';
 
 type ButtonProps = {
   children: React.ReactNode;
@@ -54,6 +53,22 @@ export function Hairline({ className = '' }: { className?: string }) {
   return <div className={`h-px w-full bg-edge ${className}`} />;
 }
 
+export function IslamicDivider({ className = '' }: { className?: string }) {
+  return (
+    <div className={`flex items-center gap-2 ${className}`}>
+      <div className="flex-1 h-px bg-edge" />
+      <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+        <polygon
+          points="8,1 9.15,5.23 12.95,3.05 10.77,6.85 15,8 10.77,9.15 12.95,12.95 9.15,10.77 8,15 6.85,10.77 3.05,12.95 5.23,9.15 1,8 5.23,6.85 3.05,3.05 6.85,5.23"
+          fill="#B8760D"
+          opacity="0.5"
+        />
+      </svg>
+      <div className="flex-1 h-px bg-edge" />
+    </div>
+  );
+}
+
 export function Field({
   label,
   value,
@@ -82,8 +97,10 @@ export function Field({
 export function EmptyState({ title, body }: { title: string; body: string }) {
   return (
     <div className="flex flex-col items-center justify-center h-full px-6 text-center">
-      <div className="text-eucalyptus opacity-50">
-        <Pill size={36} strokeWidth={1} />
+      <div className="text-eucalyptus opacity-40">
+        <svg width="40" height="40" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <polygon points="8,1 9.15,5.23 12.95,3.05 10.77,6.85 15,8 10.77,9.15 12.95,12.95 9.15,10.77 8,15 6.85,10.77 3.05,12.95 5.23,9.15 1,8 5.23,6.85 3.05,3.05 6.85,5.23" />
+        </svg>
       </div>
       <h3 className="font-display text-2xl text-ink mt-4">{title}</h3>
       <p className="font-display italic text-ink-soft mt-2 max-w-md text-base leading-relaxed">
