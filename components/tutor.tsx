@@ -65,8 +65,25 @@ export function Tutor({ language }: { language: Language }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content, language }),
       });
-      const { reply } = await r.json();
-      setMessages((m) => [...m, { role: 'assistant', content: reply }]);
+      if (!r.ok || !r.body) {
+        setMessages((m) => [...m, { role: 'assistant', content: 'Connection hiccup — try again.' }]);
+        setSending(false);
+        return;
+      }
+      setMessages((m) => [...m, { role: 'assistant', content: '' }]);
+      const reader = r.body.getReader();
+      const decoder = new TextDecoder();
+      let fullText = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        fullText += decoder.decode(value, { stream: true });
+        setMessages((m) => {
+          const updated = [...m];
+          updated[updated.length - 1] = { role: 'assistant', content: fullText };
+          return updated;
+        });
+      }
     } catch {
       setMessages((m) => [...m, { role: 'assistant', content: 'Connection hiccup — try again.' }]);
     }
@@ -122,10 +139,13 @@ export function Tutor({ language }: { language: Language }) {
                   className={`mt-1.5 text-[0.95rem] leading-relaxed text-ink whitespace-pre-wrap pl-3.5 border-l-2 ${m.role === 'assistant' ? 'border-eucalyptus' : 'border-edge'}`}
                 >
                   {m.content}
+                  {sending && m.role === 'assistant' && i === messages.length - 1 && (
+                    <span className="inline-block w-[2px] h-[1em] bg-eucalyptus ml-0.5 align-middle animate-pulse" />
+                  )}
                 </div>
               </div>
             ))}
-            {sending && (
+            {sending && messages[messages.length - 1]?.role === 'user' && (
               <div>
                 <Eyebrow>Tutor</Eyebrow>
                 <div className="flex items-center gap-2 mt-1 pl-3 text-ink-soft">
