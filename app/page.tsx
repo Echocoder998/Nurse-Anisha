@@ -113,7 +113,7 @@ export default function Page() {
             <img
               src="/anishalogo.svg"
               alt="Anisha's NCLEX Lab"
-              className="h-16 w-auto shrink-0 object-contain"
+              className="h-28 w-auto shrink-0 object-contain"
             />
           </div>
           <LanguageSwitch value={language} onChange={setLanguage} />
