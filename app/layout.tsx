@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Anisha's Apothecary · NCLEX pharmacology",
-  description: 'Pharmacology study companion for nursing students',
+  title: "Anisha's NCLEX Lab · Moro Heritage",
+  description: 'NCLEX study companion for nursing students',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

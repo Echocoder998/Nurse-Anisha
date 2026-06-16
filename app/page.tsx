@@ -77,7 +77,7 @@ export default function Page() {
               </svg>
             </div>
             <h1 className="font-display text-[1.4rem] font-medium text-ink tracking-tight whitespace-nowrap">
-              Anisha&rsquo;s Apothecary
+              Anisha&rsquo;s NCLEX Lab
             </h1>
             <span className="font-display italic text-ink-faint text-[0.85rem] hidden md:inline">
               · NCLEX study companion
