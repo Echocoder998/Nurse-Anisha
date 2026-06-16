@@ -30,6 +30,7 @@ export const quizAttempts = sqliteTable('quiz_attempts', {
   topic: text('topic'),
   subject: text('subject'),
   isCorrect: integer('is_correct', { mode: 'boolean' }).notNull(),
+  questionJson: text('question_json'),
   createdAt: integer('created_at').notNull(),
 });
 

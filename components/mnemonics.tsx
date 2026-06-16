@@ -101,7 +101,7 @@ export function Mnemonics({ language }: { language: Language }) {
                     >
                       {m.type}
                     </span>
-                    <h3 className="font-display text-[1.6rem] sm:text-[2rem] text-eucalyptus mt-2 leading-tight tracking-tight">
+                    <h3 className="font-display text-[2rem] sm:text-[2.6rem] text-eucalyptus mt-2 leading-tight tracking-tight">
                       {m.title}
                     </h3>
                     {m.breakdown?.length > 0 && (

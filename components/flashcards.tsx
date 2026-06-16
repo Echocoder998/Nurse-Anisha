@@ -11,6 +11,7 @@ export function Flashcards({ drugCount, onChange }: { drugCount: number; onChang
   const [cards, setCards] = useState<DueCard[]>([]);
   const [current, setCurrent] = useState(0);
   const [revealed, setRevealed] = useState(false);
+  const [showGrade, setShowGrade] = useState(false);
   const [loading, setLoading] = useState(true);
   const [sessionDone, setSessionDone] = useState(false);
 
@@ -21,15 +22,20 @@ export function Flashcards({ drugCount, onChange }: { drugCount: number; onChang
     setCards(due);
     setCurrent(0);
     setRevealed(false);
+    setShowGrade(false);
     setSessionDone(due.length === 0);
     setLoading(false);
   };
 
-  useEffect(() => {
-    loadDue();
-  }, [drugCount]);
+  useEffect(() => { loadDue(); }, [drugCount]);
+
+  const handleReveal = () => {
+    setRevealed(true);
+    setTimeout(() => setShowGrade(true), 450);
+  };
 
   const grade = async (quality: number) => {
+    setShowGrade(false);
     const card = cards[current];
     await fetch('/api/flashcards/grade', {
       method: 'POST',
@@ -37,8 +43,9 @@ export function Flashcards({ drugCount, onChange }: { drugCount: number; onChang
       body: JSON.stringify({ id: card.id, quality }),
     });
     onChange();
-    if (current + 1 >= cards.length) setSessionDone(true);
-    else {
+    if (current + 1 >= cards.length) {
+      setSessionDone(true);
+    } else {
       setCurrent(current + 1);
       setRevealed(false);
     }
@@ -94,35 +101,54 @@ export function Flashcards({ drugCount, onChange }: { drugCount: number; onChang
 
       <div className="flex-1 flex items-center justify-center px-3 sm:px-6 py-4 sm:py-8 overflow-y-auto">
         <div className="w-full max-w-xl">
-          <div
-            className={`bg-paper border border-edge rounded shadow-sm p-5 sm:p-10 min-h-[16rem] sm:min-h-[24rem] ${revealed ? '' : 'cursor-pointer'}`}
-            onClick={() => !revealed && setRevealed(true)}
-          >
-            <Eyebrow>{card.drug.drugClass || 'Drug'}</Eyebrow>
-            <h3 className="font-display text-[1.75rem] sm:text-[2.5rem] text-ink mt-2 leading-none tracking-tight">
-              {card.drug.name}
-            </h3>
-            {card.drug.genericName && card.drug.genericName !== card.drug.name && (
-              <div className="font-display italic text-ink-soft text-lg">{card.drug.genericName}</div>
-            )}
-            <Hairline className="my-5" />
-            {!revealed ? (
-              <div className="text-center py-8 text-ink-faint italic font-display">
-                Tap to reveal
-              </div>
-            ) : (
-              <div className="space-y-3 text-[0.9rem] text-ink leading-relaxed">
-                {card.drug.moa && <Field label="MOA" value={card.drug.moa} />}
-                {card.drug.indication && <Field label="Used for" value={card.drug.indication} />}
-                {card.drug.sideEffects && <Field label="Side fx" value={card.drug.sideEffects} />}
-                {card.drug.nursingConsiderations && (
-                  <Field label="Nursing" value={card.drug.nursingConsiderations} highlight />
+          {/* ── flip card ── */}
+          <div className="flip-card">
+            <div
+              className={`flip-card-inner ${revealed ? 'flipped' : ''}`}
+              onClick={() => !revealed && handleReveal()}
+            >
+              {/* Front face */}
+              <div className="flip-card-face bg-paper border border-edge rounded shadow-sm p-5 sm:p-10 cursor-pointer">
+                <Eyebrow>{card.drug.drugClass || 'Drug'}</Eyebrow>
+                <h3 className="font-display text-[2rem] sm:text-[3rem] text-ink mt-2 leading-none tracking-tight">
+                  {card.drug.name}
+                </h3>
+                {card.drug.genericName && card.drug.genericName !== card.drug.name && (
+                  <div className="font-display italic text-ink-soft text-lg mt-1">
+                    {card.drug.genericName}
+                  </div>
                 )}
+                <Hairline className="my-5" />
+                <div className="text-center py-8 text-ink-faint italic font-display">
+                  Tap to reveal
+                </div>
               </div>
-            )}
+
+              {/* Back face */}
+              <div className="flip-card-face flip-card-back bg-paper border border-edge rounded shadow-sm p-5 sm:p-10">
+                <Eyebrow>{card.drug.drugClass || 'Drug'}</Eyebrow>
+                <h3 className="font-display text-[1.5rem] sm:text-[2rem] text-ink mt-1 leading-tight tracking-tight">
+                  {card.drug.name}
+                </h3>
+                {card.drug.genericName && card.drug.genericName !== card.drug.name && (
+                  <div className="font-display italic text-ink-soft text-base mt-0.5">
+                    {card.drug.genericName}
+                  </div>
+                )}
+                <Hairline className="my-4" />
+                <div className="space-y-3 text-[0.9rem] text-ink leading-relaxed">
+                  {card.drug.moa && <Field label="MOA" value={card.drug.moa} />}
+                  {card.drug.indication && <Field label="Used for" value={card.drug.indication} />}
+                  {card.drug.sideEffects && <Field label="Side fx" value={card.drug.sideEffects} />}
+                  {card.drug.nursingConsiderations && (
+                    <Field label="Nursing" value={card.drug.nursingConsiderations} highlight />
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
 
-          {revealed && (
+          {showGrade && (
             <div className="mt-4">
               <Eyebrow>How well did you remember?</Eyebrow>
               <div className="grid grid-cols-4 gap-2 mt-2">

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { drugs, quizAttempts } from '@/lib/schema';
-import { count, sql } from 'drizzle-orm';
+import { count, sql, eq, and, isNotNull, desc } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 import { completeJSON } from '@/lib/anthropic';
 import { buildPersona, languageRule, Language } from '@/lib/persona';
@@ -25,16 +25,51 @@ const SUBJECT_DIRECTIVES: Record<string, string> = {
     'Write an NCLEX-RN community health nursing question covering epidemiology, health promotion, disease prevention, disaster preparedness, or population-focused care.',
 };
 
-export async function GET() {
-  const [stats] = await db
+export async function GET(req: NextRequest) {
+  const review = new URL(req.url).searchParams.get('review');
+
+  if (review === 'true') {
+    const wrongs = await db
+      .select()
+      .from(quizAttempts)
+      .where(and(eq(quizAttempts.isCorrect, false), isNotNull(quizAttempts.questionJson)))
+      .orderBy(desc(quizAttempts.createdAt))
+      .limit(20);
+
+    const questions = wrongs
+      .map((w) => {
+        try { return JSON.parse(w.questionJson!); }
+        catch { return null; }
+      })
+      .filter(Boolean);
+
+    return NextResponse.json({ questions });
+  }
+
+  const [overall] = await db
     .select({
       total: count(),
       correct: sql<number>`sum(case when ${quizAttempts.isCorrect} = 1 then 1 else 0 end)`,
     })
     .from(quizAttempts);
+
+  const bySubject = await db
+    .select({
+      subject: quizAttempts.subject,
+      total: count(),
+      correct: sql<number>`sum(case when ${quizAttempts.isCorrect} = 1 then 1 else 0 end)`,
+    })
+    .from(quizAttempts)
+    .groupBy(quizAttempts.subject);
+
   return NextResponse.json({
-    total: stats?.total ?? 0,
-    correct: Number(stats?.correct ?? 0),
+    total: overall?.total ?? 0,
+    correct: Number(overall?.correct ?? 0),
+    bySubject: bySubject.map((s) => ({
+      subject: s.subject ?? 'pharmacology',
+      total: s.total,
+      correct: Number(s.correct ?? 0),
+    })),
   });
 }
 
@@ -89,12 +124,13 @@ NCLEX style: prioritize "what does the nurse do FIRST/NEXT", "which finding requ
   }
 
   if (action === 'record') {
-    const { topic, isCorrect, subject } = body;
+    const { topic, isCorrect, subject, questionJson } = body;
     await db.insert(quizAttempts).values({
       id: nanoid(10),
       topic: topic ?? null,
       subject: subject ?? null,
       isCorrect: Boolean(isCorrect),
+      questionJson: (!isCorrect && questionJson) ? JSON.stringify(questionJson) : null,
       createdAt: Date.now(),
     });
     return NextResponse.json({ ok: true });

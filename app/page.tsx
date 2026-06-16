@@ -1,20 +1,47 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { MessageCircle, Layers, BookOpen, Library as LibraryIcon, Headphones, Brain, Loader2 } from 'lucide-react';
+import {
+  MessageCircle,
+  Layers,
+  BookOpen,
+  Library as LibraryIcon,
+  Headphones,
+  Brain,
+  BarChart2,
+  Loader2,
+} from 'lucide-react';
 import { Tutor } from '@/components/tutor';
 import { Flashcards } from '@/components/flashcards';
 import { Practice } from '@/components/practice';
 import { Library } from '@/components/library';
 import { Listen } from '@/components/listen';
 import { Mnemonics } from '@/components/mnemonics';
+import { Progress } from '@/components/progress';
 import { LanguageSwitch } from '@/components/language-switch';
 import type { Drug } from '@/lib/schema';
 import type { Language } from '@/lib/persona';
 
-type Mode = 'tutor' | 'flashcards' | 'practice' | 'library' | 'listen' | 'mnemonics';
+type Mode = 'tutor' | 'flashcards' | 'practice' | 'mnemonics' | 'progress' | 'library' | 'listen';
+
+const SUBJECT_LABEL: Record<string, string> = {
+  pharmacology: 'Pharmacology',
+  fundamentals: 'Fundamentals',
+  'med-surg': 'Med-Surg',
+  maternal: 'Maternal',
+  pediatrics: 'Pediatrics',
+  'mental-health': 'Mental Health',
+  leadership: 'Leadership',
+  community: 'Community',
+};
 
 const LANG_KEY = 'apothecary.language';
+
+type PracticeStats = {
+  total: number;
+  correct: number;
+  bySubject: { subject: string; total: number; correct: number }[];
+} | null;
 
 export default function Page() {
   const [mode, setMode] = useState<Mode>('tutor');
@@ -22,12 +49,11 @@ export default function Page() {
   const [dueCount, setDueCount] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [language, setLanguageState] = useState<Language>('en');
+  const [practiceStats, setPracticeStats] = useState<PracticeStats>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem(LANG_KEY) as Language | null;
-    if (saved === 'en' || saved === 'tl') {
-      setLanguageState(saved);
-    }
+    if (saved === 'en' || saved === 'tl') setLanguageState(saved);
   }, []);
 
   const setLanguage = (l: Language) => {
@@ -36,23 +62,36 @@ export default function Page() {
   };
 
   const refresh = useCallback(async () => {
-    const [d, due] = await Promise.all([
+    const [d, due, ps] = await Promise.all([
       fetch('/api/drugs').then((r) => r.json()),
       fetch('/api/flashcards').then((r) => r.json()),
+      fetch('/api/practice').then((r) => r.json()),
     ]);
     setDrugs(d);
     setDueCount(due.length);
+    setPracticeStats(ps);
   }, []);
 
   useEffect(() => {
     refresh().finally(() => setLoaded(true));
   }, [refresh]);
 
+  const weakSubject =
+    practiceStats?.bySubject
+      ?.filter((s) => s.total >= 3)
+      .sort((a, b) => a.correct / a.total - b.correct / b.total)[0] ?? null;
+
+  const showNudge =
+    weakSubject != null &&
+    weakSubject.correct / weakSubject.total < 0.7 &&
+    mode !== 'progress';
+
   const modes: { id: Mode; label: string; Icon: typeof MessageCircle; badge?: number | null }[] = [
     { id: 'tutor', label: 'Tutor', Icon: MessageCircle },
     { id: 'flashcards', label: 'Cards', Icon: Layers, badge: dueCount > 0 ? dueCount : null },
     { id: 'practice', label: 'Practice', Icon: BookOpen },
     { id: 'mnemonics', label: 'Mnemonics', Icon: Brain },
+    { id: 'progress', label: 'Progress', Icon: BarChart2 },
     { id: 'library', label: 'Library', Icon: LibraryIcon, badge: drugs.length > 0 ? drugs.length : null },
     { id: 'listen', label: 'Listen', Icon: Headphones },
   ];
@@ -112,11 +151,22 @@ export default function Page() {
           })}
         </nav>
 
-        <main className="flex-1 overflow-hidden">
+        {showNudge && (
+          <button
+            onClick={() => setMode('practice')}
+            className="text-[0.72rem] bg-eucalyptus-soft text-eucalyptus text-center py-1.5 px-4 font-body w-full border-b border-edge hover:bg-eucalyptus hover:text-white transition"
+          >
+            {SUBJECT_LABEL[weakSubject!.subject] ?? weakSubject!.subject} accuracy:{' '}
+            {Math.round((weakSubject!.correct / weakSubject!.total) * 100)}% — drill it →
+          </button>
+        )}
+
+        <main key={mode} className="flex-1 overflow-hidden fade-in">
           {mode === 'tutor' && <Tutor language={language} />}
           {mode === 'flashcards' && <Flashcards drugCount={drugs.length} onChange={refresh} />}
           {mode === 'practice' && <Practice language={language} />}
           {mode === 'mnemonics' && <Mnemonics language={language} />}
+          {mode === 'progress' && <Progress language={language} dueCount={dueCount} />}
           {mode === 'library' && <Library drugs={drugs} onChange={refresh} language={language} />}
           {mode === 'listen' && <Listen language={language} />}
         </main>
