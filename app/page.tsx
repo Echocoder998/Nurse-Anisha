@@ -109,18 +109,20 @@ export default function Page() {
       <div className="flex flex-col h-screen max-w-[1100px] mx-auto bg-bg">
         <div className="h-[3px] bg-eucalyptus flex-shrink-0" aria-hidden="true" />
         <header className="flex items-center justify-between px-6 py-4 border-b border-edge gap-3 bg-gradient-to-b from-eucalyptus-soft/30 to-transparent">
-          <div className="flex items-baseline gap-3 min-w-0">
-            <div className="text-eucalyptus shrink-0">
-              <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                <polygon points="8,1 9.15,5.23 12.95,3.05 10.77,6.85 15,8 10.77,9.15 12.95,12.95 9.15,10.77 8,15 6.85,10.77 3.05,12.95 5.23,9.15 1,8 5.23,6.85 3.05,3.05 6.85,5.23" />
-              </svg>
+          <div className="flex items-center gap-3 min-w-0">
+            <img
+              src="/anishalogo.svg"
+              alt="Anisha's NCLEX Lab logo"
+              className="h-10 w-10 shrink-0 object-contain"
+            />
+            <div className="flex items-baseline gap-2 min-w-0">
+              <h1 className="font-display text-[1.4rem] font-medium text-ink tracking-tight whitespace-nowrap">
+                Anisha&rsquo;s NCLEX Lab
+              </h1>
+              <span className="font-display italic text-ink-faint text-[0.85rem] hidden md:inline">
+                · NCLEX study companion
+              </span>
             </div>
-            <h1 className="font-display text-[1.4rem] font-medium text-ink tracking-tight whitespace-nowrap">
-              Anisha&rsquo;s NCLEX Lab
-            </h1>
-            <span className="font-display italic text-ink-faint text-[0.85rem] hidden md:inline">
-              · NCLEX study companion
-            </span>
           </div>
           <LanguageSwitch value={language} onChange={setLanguage} />
         </header>

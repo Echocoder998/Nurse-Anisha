@@ -4,11 +4,16 @@
   "description": "NCLEX study companion for nursing students",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FAF6F0",
-  "theme_color": "#2A9D8F",
+  "background_color": "#F7F3EA",
+  "theme_color": "#2E9387",
   "icons": [
     {
-      "src": "/icon.svg",
+      "src": "/favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "/anishalogo.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }

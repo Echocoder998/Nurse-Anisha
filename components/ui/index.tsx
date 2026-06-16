@@ -60,7 +60,7 @@ export function IslamicDivider({ className = '' }: { className?: string }) {
       <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
         <polygon
           points="8,1 9.15,5.23 12.95,3.05 10.77,6.85 15,8 10.77,9.15 12.95,12.95 9.15,10.77 8,15 6.85,10.77 3.05,12.95 5.23,9.15 1,8 5.23,6.85 3.05,3.05 6.85,5.23"
-          fill="#2A9D8F"
+          fill="#2E9387"
           opacity="0.5"
         />
       </svg>

@@ -4,8 +4,8 @@
 
 @layer base {
   html, body {
-    background: #FAF6F0;
-    color: #5C3A56;
+    background: #F7F3EA;
+    color: #59374F;
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
@@ -19,7 +19,7 @@
     font-size: 0.7rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #8A6D85;
+    color: #8A6878;
     font-weight: 500;
   }
   .fade-in {
