@@ -67,7 +67,7 @@ export default function Page() {
 
   return (
     <div className="bg-bg min-h-screen text-ink font-body">
-      <div className="flex flex-col h-screen max-w-[1100px] mx-auto bg-bg islamic-bg">
+      <div className="flex flex-col h-screen max-w-[1100px] mx-auto bg-bg">
         <div className="h-[3px] bg-eucalyptus flex-shrink-0" aria-hidden="true" />
         <header className="flex items-center justify-between px-6 py-4 border-b border-edge gap-3 bg-gradient-to-b from-eucalyptus-soft/30 to-transparent">
           <div className="flex items-baseline gap-3 min-w-0">
