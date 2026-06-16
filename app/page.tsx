@@ -109,20 +109,12 @@ export default function Page() {
       <div className="flex flex-col h-screen max-w-[1100px] mx-auto bg-bg">
         <div className="h-[3px] bg-eucalyptus flex-shrink-0" aria-hidden="true" />
         <header className="flex items-center justify-between px-6 py-4 border-b border-edge gap-3 bg-gradient-to-b from-eucalyptus-soft/30 to-transparent">
-          <div className="flex items-center gap-3 min-w-0">
+          <div className="flex items-center min-w-0">
             <img
               src="/anishalogo.svg"
-              alt="Anisha's NCLEX Lab logo"
-              className="h-10 w-10 shrink-0 object-contain"
+              alt="Anisha's NCLEX Lab"
+              className="h-16 w-auto shrink-0 object-contain"
             />
-            <div className="flex items-baseline gap-2 min-w-0">
-              <h1 className="font-display text-[1.4rem] font-medium text-ink tracking-tight whitespace-nowrap">
-                Anisha&rsquo;s NCLEX Lab
-              </h1>
-              <span className="font-display italic text-ink-faint text-[0.85rem] hidden md:inline">
-                · NCLEX study companion
-              </span>
-            </div>
           </div>
           <LanguageSwitch value={language} onChange={setLanguage} />
         </header>
